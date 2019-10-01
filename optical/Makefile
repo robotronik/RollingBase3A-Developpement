@@ -33,13 +33,21 @@ cfd:
 	make debug
 
 addSource:
-	@cat $(PROJECT_DIR)/Makefile | sed -e '/^Src/ d' -e '/^ Src/ d' -e '/^\\/ d' > $(PROJECT_DIR)/tmpMakefile; 
-	mv $(PROJECT_DIR)/tmpMakefile $(PROJECT_DIR)/Makefile;
-	sed -i '/C_SOURCES =/a$(patsubst $(PROJECT_DIR)/Src/%.c,Src/%.c \\\n, $(wildcard $(PROJECT_DIR)/Src/*.c))\\' $(PROJECT_DIR)/Makefile
+	@sed -e '/^Lib/ d' -e '/^ Lib/ d' -e '/^Src/ d' -e '/^ Src/ d' -e '/^\\/ d' -e '/^-ILib/ d' $(PROJECT_DIR)/Makefile  > $(PROJECT_DIR)/tmpMakefile; 
+	@mv $(PROJECT_DIR)/tmpMakefile $(PROJECT_DIR)/Makefile;
+ifneq (, $(shell find $(PROJECT_DIR)/Src -type f -iname '*.c'))
+	@sed -i '/C_SOURCES =/a$(patsubst $(PROJECT_DIR)/Src/%.c,Src/%.c \\\n, $(wildcard $(PROJECT_DIR)/Src/*.c))\\' $(PROJECT_DIR)/Makefile;
+endif
+ifneq ("","$(shell find $(PROJECT_DIR)/Lib -type f -iname '*.c')")
+	@sed -i '/C_SOURCES =/a$(patsubst $(PROJECT_DIR)/Lib/%.c,Lib/%.c \\\n, $(wildcard $(PROJECT_DIR)/Lib/**/*.c))\\' $(PROJECT_DIR)/Makefile;
+endif
+ifneq ("","$(shell cd $(PROJECT_DIR)/Lib)")
+	@sed -i '/C_INCLUDES =/a $(patsubst $(PROJECT_DIR)/Lib%, -ILib% \\\n, $(wildcard $(shell find $(PROJECT_DIR)/Lib -type d -print))) \\' $(PROJECT_DIR)/Makefile;
+endif
 
 comp:
 	@echo -e "${vert_gras}+--------------------[ Compilation ]--------------------+ ${fin}"
-	#make addSource
+	make addSource
 	cd $(PROJECT_DIR);\
 	make all
 	cd $(ORI);\
