@@ -5,7 +5,7 @@
 
 #define OPTI_ENABLE 0
 
-uint8_t PMW3901_GetPos(int16_t * dposx, int16_t * dposy);
+void PMW3901_GetPos(int16_t * dposx, int16_t * dposy);
 
 uint8_t PMW3901_ReadRegister(uint8_t reg);
 

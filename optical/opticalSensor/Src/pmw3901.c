@@ -1,6 +1,6 @@
 #include "pmw3901.h"
 
-uint8_t PMW3901_GetPos(int16_t  * dposx, int16_t * dposy){
+void PMW3901_GetPos(int16_t  * dposx, int16_t * dposy){
     //get the delta pos from the capteur
     *dposx =((int16_t)PMW3901_ReadRegister(0x04)<<8) | PMW3901_ReadRegister(0x03);
     *dposy =((int16_t)PMW3901_ReadRegister(0x06)<<8) | PMW3901_ReadRegister(0x05);

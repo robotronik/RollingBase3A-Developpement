@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "pmw3901.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +59,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+char buff[25];
 /* USER CODE END 0 */
 
 /**
@@ -100,7 +101,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    
+    int16_t pox,poy;
+    PMW3901_GetPos(&pox,&poy);
+    int n = sprintf("%d and %d\n",pox,poy);
+    HAL_UART_Transmit(&huart2,buff,n,100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
